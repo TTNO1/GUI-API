@@ -15,19 +15,30 @@ public class StdInventoryGUIFactory implements InventoryGUIFactory{
 	
 	private Provider<Map<Integer, Consumer<InventoryGUIClickEvent>>> mapProvider;
 	
+	private Provider<StdInventoryGUISubAreaFactory> subAreaFactoryProvider;
+	
 	@Inject
-	public StdInventoryGUIFactory(Provider<InventoryFactory> inventoryFactoryProvider, Provider<Map<Integer, Consumer<InventoryGUIClickEvent>>> mapProvider) {
+	public StdInventoryGUIFactory(Provider<InventoryFactory> inventoryFactoryProvider, Provider<Map<Integer, Consumer<InventoryGUIClickEvent>>> mapProvider,Provider<StdInventoryGUISubAreaFactory> subAreaFactoryProvider) {
 		
 		this.inventoryFactoryProvider = inventoryFactoryProvider;
 		
 		this.mapProvider = mapProvider;
 		
+		this.subAreaFactoryProvider = subAreaFactoryProvider;
+		
 	}
 
 	@Override
+	public InventoryGUI create(String title, int size, InventoryGUIArea superArea) {
+		
+		return new StdInventoryGUI(title, size, superArea, inventoryFactoryProvider.get(), mapProvider.get(), subAreaFactoryProvider.get());
+		
+	}
+	
+	@Override
 	public InventoryGUI create(String title, int size) {
 		
-		return new StdInventoryGUI(title, size, inventoryFactoryProvider.get(), mapProvider.get());
+		return new StdInventoryGUI(title, size, inventoryFactoryProvider.get(), mapProvider.get(), subAreaFactoryProvider.get());
 		
 	}
 

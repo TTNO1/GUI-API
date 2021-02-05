@@ -42,6 +42,8 @@ public interface InventoryGUIArea {
 	 */
 	InventoryGUIArea getSuperArea();
 	
+	InventoryGUIArea getSubArea(int startSlot, int endSlot);
+	
 	/**
 	 * Returns a copy of the contents of the InventoryGUIArea.
 	 *
@@ -76,6 +78,7 @@ public interface InventoryGUIArea {
 	
 	/**
 	 * Returns the index of the row of the given slot.
+	 * Note: Will not throw exception if the slot index is out of bounds.
 	 *
 	 * @param slot The index of the inventory slot.
 	 * @return The index of the row (starts at 0).
@@ -84,6 +87,7 @@ public interface InventoryGUIArea {
 	
 	/**
 	 * Returns the index of the column of the given slot.
+	 * Note: Will not throw exception if the slot index is out of bounds.
 	 *
 	 * @param slot The index of the inventory slot.
 	 * @return The index of the column (starts at 0).
@@ -153,7 +157,8 @@ public interface InventoryGUIArea {
 	Consumer<InventoryGUIClickEvent> getOnClick(int slot);
 	
 	/**
-	 * Sets the "on click" action for the given slot. Use null to remove.
+	 * Sets the "on click" action for the given slot. Use null to remove.<br>
+	 * Note: The slot index does not have to be within the boundaries of the inventory.
 	 *
 	 * @param slot The index of the inventory slot.
 	 * @param onClick The action to be performed when the slot is clicked. Use null to remove.
