@@ -14,9 +14,9 @@ public abstract class AbstractInventoryGUIArea implements InventoryGUIArea {
 	
 	protected InventoryGUIArea superArea;
 	
-	protected StdInventoryGUISubAreaFactory subAreaFactory;
+	protected InventoryGUISubAreaFactory subAreaFactory;
 	
-	public AbstractInventoryGUIArea(InventoryGUIArea superArea, StdInventoryGUISubAreaFactory subAreaFactory) {
+	public AbstractInventoryGUIArea(InventoryGUIArea superArea, InventoryGUISubAreaFactory subAreaFactory) {
 		
 		this.superArea = superArea;
 		
@@ -264,7 +264,7 @@ public abstract class AbstractInventoryGUIArea implements InventoryGUIArea {
 	@Override
 	public void setColumn(int columnNumber, ItemStack item, Consumer<InventoryGUIClickEvent> onClick) {
 		
-		for(int i = columnNumber; i <= getSize() - (getWidth() - columnNumber); i = i + getWidth()) {
+		for(int i = columnNumber; i <= getSize() - (getWidth() - columnNumber); i += getWidth()) {
 			
 			setItem(i, item, onClick);
 			
@@ -352,7 +352,7 @@ public abstract class AbstractInventoryGUIArea implements InventoryGUIArea {
 			
 		}
 		
-		for(int row = padding, index = startingIndex; row < getHeight() - padding && index < items.size(); row = row + verticalSpacing + 1) {
+		for(int row = padding, index = startingIndex; row < getHeight() - padding && index < items.size(); row += verticalSpacing + 1) {
 			
 			for(int column = padding; column < getWidth() - padding && index < items.size(); column = column + horizontalSpacing + 1, index++) {
 				
