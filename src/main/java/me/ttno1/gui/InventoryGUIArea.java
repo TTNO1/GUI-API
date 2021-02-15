@@ -42,7 +42,9 @@ public interface InventoryGUIArea {
 	 */
 	InventoryGUIArea getSuperArea();
 	
-	InventoryGUIArea getSubArea(int startSlot, int endSlot);
+	void setSuperArea(InventoryGUIArea value);
+	
+	InventoryGUIArea getNewSubArea(int startSlot, int endSlot);
 	
 	/**
 	 * Returns a copy of the contents of the InventoryGUIArea.

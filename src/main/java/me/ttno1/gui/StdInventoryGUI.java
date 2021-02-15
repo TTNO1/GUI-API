@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 import me.ttno1.gui.bukkitfactories.InventoryFactory;
@@ -30,11 +31,13 @@ public class StdInventoryGUI extends AbstractInventoryGUIArea implements Invento
 	
 	public StdInventoryGUI(String title, int size, InventoryGUIArea superArea, InventoryFactory inventoryFactory, Map<Integer, Consumer<InventoryGUIClickEvent>> onClickMap, StdInventoryGUISubAreaFactory subAreaFactory) {
 		
-		super(superArea, subAreaFactory);
+		super(subAreaFactory);
 		
 		this.title = title;
 		
 		this.items = new ItemStack[size];
+		
+		this.superArea = superArea;
 		
 		this.onClickMap = onClickMap;
 		
@@ -116,9 +119,16 @@ public class StdInventoryGUI extends AbstractInventoryGUIArea implements Invento
 	}
 	
 	@Override
-	public void open(HumanEntity player) {
+	public InventoryView open(HumanEntity player) {
 		
-		player.openInventory(getInventory());
+		return player.openInventory(getInventory());
+		
+	}
+	
+	@Override
+	public void setSuperArea(InventoryGUIArea value) {
+		
+		superArea = value;
 		
 	}
 

@@ -10,7 +10,8 @@ import com.google.common.collect.ObjectArrays;
 
 import me.ttno1.gui.events.InventoryGUIClickEvent;
 /**
- * The InvnetoryGUIArea functionality behaves as though the sub-InventoryGUIs <br>are arranged in a single vertical column starting at the top and going down.
+ * The InvnetoryGUIArea functionality behaves as though the sub-InventoryGUIs<br>
+ * are arranged in a single vertical column starting at the top and going down.
  */
 public class StdMultiInventoryGUI extends AbstractInventoryGUIArea implements MultiInventoryGUI {
 	
@@ -18,13 +19,11 @@ public class StdMultiInventoryGUI extends AbstractInventoryGUIArea implements Mu
 	
 	private Map<Integer, SlotData> slotMap;
 	
-	private int size;
-	
 	private int height;
 	
 	public StdMultiInventoryGUI(InventoryGUIArea superArea, List<InventoryGUI> guiList, Map<Integer, SlotData> slotMap, StdInventoryGUISubAreaFactory subAreaFactory) {
 		
-		super(superArea, subAreaFactory);
+		super(subAreaFactory);
 		
 		this.guis = guiList;
 		
@@ -35,6 +34,8 @@ public class StdMultiInventoryGUI extends AbstractInventoryGUIArea implements Mu
 	}
 	
 	private void updateSize() {
+		
+		slotMap.clear();
 		
 		int slot = 0;
 		
@@ -48,16 +49,6 @@ public class StdMultiInventoryGUI extends AbstractInventoryGUIArea implements Mu
 			
 		}
 		
-		int size = 0;
-		
-		for(InventoryGUI gui : guis) {
-			
-			size += gui.getSize();
-			
-		}
-		
-		this.size = size;
-		
 		int height = 0;
 		
 		for(InventoryGUI gui : guis) {
@@ -69,11 +60,18 @@ public class StdMultiInventoryGUI extends AbstractInventoryGUIArea implements Mu
 		this.height = height;
 		
 	}
+	
+	@Override
+	public void setSuperArea(InventoryGUIArea value) {
+		
+		superArea = value;
+		
+	}
 
 	@Override
 	public int getSize() {
 		
-		return size;
+		return getHeight() * getWidth();
 		
 	}
 	

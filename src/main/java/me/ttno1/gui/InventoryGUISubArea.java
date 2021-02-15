@@ -11,14 +11,18 @@ public class InventoryGUISubArea extends AbstractInventoryGUIArea {
 	
 	private Map<Integer, Integer> slotMap;
 	
+	private int startSlot;
+	
+	private int endSlot;
+	
 	private int width;
 	
 	private int height;
 	
 	public InventoryGUISubArea(InventoryGUIArea superArea, int startSlot, int endSlot, Map<Integer, Integer> slotMap, StdInventoryGUISubAreaFactory subAreaFactory) {
 		
-		super(superArea, subAreaFactory);
-		
+		super(subAreaFactory);
+		//make sure endSlot > startSlot to make things easier later on
 		if (startSlot > endSlot) {
 			
 			int tempStartSlot = startSlot;
@@ -29,23 +33,47 @@ public class InventoryGUISubArea extends AbstractInventoryGUIArea {
 			
 		}
 		
-		if(endSlot >= superArea.getSize() || startSlot < 0) {
+		if(startSlot < 0) {
 			
 			throw new IllegalArgumentException("InventoryGUISubArea out of bounds of super-area");
 			
 		}
 		
-		width = (superArea.getColumnOf(endSlot) - superArea.getColumnOf(startSlot)) + 1;
+		this.startSlot = startSlot;
 		
-		height = (superArea.getRowOf(endSlot) - superArea.getRowOf(startSlot)) + 1;
+		this.endSlot = endSlot;
 		
 		this.slotMap = slotMap;
 		
-		for(int subSlot = 0, superSlot = startSlot; subSlot < width * height; subSlot++, superSlot++) {
+		setSuperArea(superArea);
+		
+	}
+	
+	//Not very practical, might move setSuperArea() to InventoryGUI
+	@Override
+	public void setSuperArea(InventoryGUIArea value) {
+		
+		if(endSlot >= value.getSize()) {
 			
-			if(superArea.getColumnOf(superSlot) > superArea.getColumnOf(endSlot) || superArea.getColumnOf(superSlot) < superArea.getColumnOf(startSlot)) {
+			throw new IllegalArgumentException("InventoryGUISubArea out of bounds of super-area");
+			
+		}
+		
+		superArea = value;
+		
+		width = (value.getColumnOf(endSlot) - value.getColumnOf(startSlot)) + 1;
+		
+		height = (value.getRowOf(endSlot) - value.getRowOf(startSlot)) + 1;
+		
+		for(int subSlot = 0, superSlot = startSlot; subSlot < getSize(); subSlot++, superSlot++) {
+			//Check if we've gone out of bounds of the area
+			if(superArea.getColumnOf(superSlot) > superArea.getColumnOf(endSlot)) {
 				
 				superSlot = superArea.getSlotAt(superArea.getColumnOf(startSlot), superArea.getRowOf(superSlot) + 1);
+				
+			} else if(superArea.getColumnOf(superSlot) < superArea.getColumnOf(startSlot)) {
+				
+				superSlot = superArea.getSlotAt(superArea.getColumnOf(startSlot), superArea.getRowOf(superSlot));
 				
 			}
 			

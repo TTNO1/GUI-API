@@ -6,27 +6,29 @@ import java.util.function.Consumer;
 
 import org.bukkit.inventory.ItemStack;
 
+import com.google.common.collect.ObjectArrays;
+
 import me.ttno1.gui.events.InventoryGUIClickEvent;
+@Deprecated
+public abstract class AbstractMultiInventoryGUIArea extends AbstractInventoryGUIArea implements MultiInventoryGUIArea {
 
-public class AbstractMultiInventoryGUIArea extends AbstractInventoryGUIArea implements MultiInventoryGUIArea {
-
-	private List<InventoryGUIArea> areas;
+	protected List<? extends InventoryGUIArea> areas;
 	
-	private Map<Integer, SlotData> slotMap;
+	protected Map<Integer, SlotData> slotMap;
 	
-	private int size;
-	
-	private int width;
-	
-	private int height;
-	
-	public AbstractMultiInventoryGUIArea(InventoryGUIArea superArea, InventoryGUISubAreaFactory subAreaFactory) {
+	public AbstractMultiInventoryGUIArea(InventoryGUISubAreaFactory subAreaFactory, Map<Integer, SlotData> slotMap, List<? extends InventoryGUIArea> areas) {
 		
-		super(superArea, subAreaFactory);
+		super(subAreaFactory);
+		
+		this.slotMap = slotMap;
+		
+		this.areas = areas;
 		
 	}
-
-	private void updateSize() {
+	
+	protected void updateSlotMap() {
+		
+		slotMap.clear();
 		
 		int slot = 0;
 		
@@ -40,64 +42,49 @@ public class AbstractMultiInventoryGUIArea extends AbstractInventoryGUIArea impl
 			
 		}
 		
-		int size = 0;
-		
-		for(InventoryGUIArea area : areas) {
-			
-			size += area.getSize();
-			
-		}
-		
-		this.size = size;
-		
-		int height = 0;
-		
-		for(InventoryGUIArea area : areas) {
-			
-			height += area.getHeight();
-			
-		}
-		
-		this.height = height;
-		
-	}
-	
-	@Override
-	public int getSize() {
-		return 0;
-	}
-
-	@Override
-	public int getWidth() {
-		return 0;
-	}
-
-	@Override
-	public int getHeight() {
-		return 0;
 	}
 
 	@Override
 	public ItemStack[] getContents() {
-		return null;
+		
+		ItemStack[] result = new ItemStack[0];
+		
+		for(InventoryGUIArea area : areas) {
+			
+			result = ObjectArrays.concat(result, area.getContents(), ItemStack.class);
+			
+		}
+		
+		return result;
+		
 	}
 
 	@Override
 	public ItemStack getItem(int slot) {
-		return null;
+		
+		return slotMap.get(slot).area.getItem(slotMap.get(slot).slot);
+		
 	}
 
 	@Override
 	public void setItem(int slot, ItemStack item, Consumer<InventoryGUIClickEvent> onClick) {
+		
+		slotMap.get(slot).area.setItem(slotMap.get(slot).slot, item, onClick);
+		
 	}
 
 	@Override
 	public Consumer<InventoryGUIClickEvent> getOnClick(int slot) {
-		return null;
+		
+		return slotMap.get(slot).area.getOnClick(slotMap.get(slot).slot);
+		
 	}
 
 	@Override
 	public void setOnClick(int slot, Consumer<InventoryGUIClickEvent> onClick) {
+		
+		slotMap.get(slot).area.setOnClick(slotMap.get(slot).slot, onClick);
+		
 	}
 
 	public static class SlotData {

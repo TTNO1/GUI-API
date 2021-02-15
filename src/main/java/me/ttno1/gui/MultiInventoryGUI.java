@@ -1,19 +1,12 @@
 package me.ttno1.gui;
 
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.inventory.InventoryView;
 
-public interface MultiInventoryGUI extends InventoryGUIArea {
-
-	int getLength();
+public interface MultiInventoryGUI extends MultiInventoryGUIArea {
 	
-	InventoryGUI getDefaultInventoryGUI();
+	InventoryView open(HumanEntity player, int index);
 	
-	void setDefaultInventoryGUI(InventoryGUI value);
-	
-	
-	
-	InventoryGUI getInventoryGUI(int index);
-	
-	InventoryGUI openInventoryGUI(int index, HumanEntity player);
+	InventoryView open(HumanEntity player);
 	
 }

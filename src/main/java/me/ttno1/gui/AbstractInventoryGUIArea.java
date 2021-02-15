@@ -16,23 +16,21 @@ public abstract class AbstractInventoryGUIArea implements InventoryGUIArea {
 	
 	protected InventoryGUISubAreaFactory subAreaFactory;
 	
-	public AbstractInventoryGUIArea(InventoryGUIArea superArea, InventoryGUISubAreaFactory subAreaFactory) {
-		
-		this.superArea = superArea;
+	public AbstractInventoryGUIArea(InventoryGUISubAreaFactory subAreaFactory) {
 		
 		this.subAreaFactory = subAreaFactory;
 		
 	}
-
+	
 	@Override
 	public InventoryGUIArea getSuperArea() {
 		
 		return superArea;
 		
 	}
-
+	
 	@Override
-	public InventoryGUIArea getSubArea(int startSlot, int endSlot) {
+	public InventoryGUIArea getNewSubArea(int startSlot, int endSlot) {
 		
 		return subAreaFactory.create(this, startSlot, endSlot);
 		
@@ -95,13 +93,15 @@ public abstract class AbstractInventoryGUIArea implements InventoryGUIArea {
 		
 	}
 
-	protected void checkSlot(int slot) {
+	protected boolean checkSlot(int slot) {
 		
 		if(slot >= getSize() || slot < 0) {
 			
 			throw new IndexOutOfBoundsException("Slot index out of bounds for InventoryGUIArea");
 			
 		}
+		
+		return true;
 		
 	}
 	
